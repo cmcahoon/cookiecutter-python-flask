@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  init:
+    build: .
+    command: ./wait-for-it.sh postgres:5432 -- python -m flask db upgrade
+    environment:
+      FLASK_APP: {{cookiecutter.module_name}}
+      DATABASE_URI: postgresql://postgres:postgres@postgres:5432/{{cookiecutter.database_name}}
+  rest:
+    build: .
+    command: ./wait-for-it.sh postgres:5432 -- gunicorn -b 0.0.0.0:5000 --timeout 60 {{cookiecutter.module_name}}:create_app()
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URI: postgresql://postgres:postgres@postgres:5432/{{cookiecutter.database_name}}
+  postgres:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: {{cookiecutter.database_name}}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
