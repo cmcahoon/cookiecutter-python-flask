@@ -104,7 +104,7 @@ rm -rf migrations
 FLASK_APP={{cookiecutter.module_name}} python -m flask db init
 
 # Create your first migration
-FLASK_APP={{cookiecutter.module_name}} python -m flask db migration -m "Initial migration."
+FLASK_APP={{cookiecutter.module_name}} python -m flask db migrate -m "Initial migration."
 ```
 
 You will now have a migration in the `migrations/versions/` directory. Alembic's documentation states you should look over the migrations carefully -- they sometimes fail to capture all model changes.
